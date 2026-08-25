@@ -1,1 +1,503 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mandhack | L'Acquisition Haut de Gamme pour Piscinistes</title>
+    <meta name="description" content="Mandhack filtre les curieux et vous livre des porteurs de projets piscine concrets. Remplissez votre carnet de commandes avec des leads ultra-qualifiés.">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Plus+Jakarta+Sans:wght@400;500;700&display=swap" rel="stylesheet">
 
+    <style>
+        /* === VARIABLES & RESET === */
+        :root {
+            --bg-deep: #030b14;
+            --bg-surface: rgba(10, 25, 47, 0.6);
+            --water-glow: #00e5ff;
+            --water-dark: #005f73;
+            --text-main: #f0f4f8;
+            --text-muted: #94a3b8;
+            --font-display: 'Outfit', sans-serif;
+            --font-body: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            cursor: none; /* Custom cursor */
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-main);
+            font-family: var(--font-body);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* === CUSTOM CURSOR === */
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background: var(--water-glow);
+        }
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 1px solid rgba(0, 229, 255, 0.5);
+            transition: width 0.2s, height 0.2s, background 0.2s;
+        }
+
+        /* === BACKGROUND EFFECTS === */
+        .ambient-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            background: radial-gradient(circle at 50% 0%, var(--water-dark) 0%, transparent 50%),
+                        radial-gradient(circle at 100% 100%, #012a36 0%, transparent 40%);
+            z-index: -1;
+            opacity: 0.6;
+            animation: breathe 10s infinite alternate ease-in-out;
+        }
+
+        @keyframes breathe {
+            0% { transform: scale(1); opacity: 0.5; }
+            100% { transform: scale(1.1); opacity: 0.8; }
+        }
+
+        /* === TYPOGRAPHY === */
+        h1, h2, h3 { font-family: var(--font-display); }
+        .gradient-text {
+            background: linear-gradient(90deg, #ffffff, var(--water-glow));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* === BUTTONS === */
+        .btn {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            text-decoration: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 0.9rem;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        .btn-glow {
+            background: transparent;
+            color: var(--water-glow);
+            border: 1px solid var(--water-glow);
+            box-shadow: 0 0 15px rgba(0, 229, 255, 0.2);
+        }
+        .btn-glow:hover {
+            background: var(--water-glow);
+            color: var(--bg-deep);
+            box-shadow: 0 0 30px rgba(0, 229, 255, 0.6);
+            transform: translateY(-2px);
+        }
+
+        /* === HEADER === */
+        header {
+            padding: 2rem 0;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .nav-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .logo {
+            font-family: var(--font-display);
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+        .logo span { color: var(--water-glow); }
+
+        /* === HERO SECTION === */
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            padding-top: 5rem;
+        }
+        .hero-content {
+            max-width: 800px;
+        }
+        .badge {
+            display: inline-block;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            background: rgba(0, 229, 255, 0.1);
+            color: var(--water-glow);
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(0, 229, 255, 0.2);
+        }
+        .hero h1 {
+            font-size: clamp(3rem, 5vw, 5rem);
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-muted);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+        }
+
+        /* === LEAD MAGNET (VALEUR GRATUITE) === */
+        .lead-magnet {
+            margin-top: -5rem;
+            position: relative;
+            z-index: 10;
+        }
+        .glass-card {
+            background: var(--bg-surface);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 24px;
+            padding: 3rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            transform: translateY(50px);
+            opacity: 0;
+            animation: slideUpFade 1s 0.5s forwards;
+        }
+        .glass-card h3 {
+            font-size: 1.8rem;
+            margin-bottom: 0.5rem;
+            color: white;
+        }
+        .glass-card p {
+            color: var(--text-muted);
+            margin-bottom: 1.5rem;
+        }
+        .form-row {
+            display: flex;
+            gap: 1rem;
+        }
+        .form-row input {
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.5);
+            color: white;
+            outline: none;
+            width: 300px;
+        }
+        .form-row input:focus {
+            border-color: var(--water-glow);
+        }
+
+        /* === EXPERTISE / METHODE === */
+        .section { padding: 8rem 0; }
+        .section-header {
+            text-align: center;
+            margin-bottom: 5rem;
+        }
+        .section-header h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+        
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        .feature-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .feature-card:hover {
+            transform: translateY(-10px);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(0, 229, 255, 0.3);
+        }
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--water-glow), transparent);
+            transform: translateX(-100%);
+            transition: 0.5s;
+        }
+        .feature-card:hover::before {
+            transform: translateX(100%);
+        }
+        .icon-box {
+            width: 60px; height: 60px;
+            border-radius: 12px;
+            background: rgba(0, 229, 255, 0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--water-glow);
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .feature-card h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+        .feature-card p { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* === FOUNDER SECTION === */
+        .founder-section {
+            display: flex;
+            align-items: center;
+            gap: 4rem;
+            background: linear-gradient(90deg, rgba(10,25,47,0.8), rgba(0,0,0,0));
+            padding: 4rem;
+            border-radius: 24px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .founder-info h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .founder-info p { color: var(--text-muted); margin-bottom: 1rem; }
+        .signature {
+            font-family: var(--font-display);
+            color: var(--water-glow);
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-top: 2rem;
+        }
+
+        /* === FOOTER === */
+        footer {
+            border-top: 1px solid rgba(255,255,255,0.1);
+            padding: 4rem 0 2rem;
+            margin-top: 4rem;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .contact-info p {
+            color: var(--text-muted);
+            margin-bottom: 0.5rem;
+        }
+        .contact-info strong { color: white; }
+        .legal {
+            text-align: center;
+            color: rgba(255,255,255,0.3);
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding-top: 2rem;
+        }
+
+        /* === ANIMATIONS === */
+        @keyframes slideUpFade {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        @media (max-width: 900px) {
+            .glass-card { flex-direction: column; text-align: center; gap: 2rem; }
+            .form-row { flex-direction: column; width: 100%; }
+            .form-row input { width: 100%; }
+            .founder-section { flex-direction: column; padding: 2rem; }
+            .footer-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Curseur Custom -->
+    <div class="cursor-dot"></div>
+    <div class="cursor-outline"></div>
+
+    <!-- Fond Animé -->
+    <div class="ambient-bg"></div>
+
+    <header>
+        <div class="container nav-inner">
+            <a href="#" class="logo">Mand<span>hack</span></a>
+            <a href="#contact" class="btn btn-glow" style="padding: 0.6rem 1.5rem; font-size: 0.8rem;">Parler à un expert</a>
+        </div>
+    </header>
+
+    <main>
+        <!-- HERO -->
+        <section class="hero container">
+            <div class="hero-content">
+                <div class="badge">Spécialiste Acquisition Piscinistes</div>
+                <h1>Ne laissez plus votre chiffre d'affaires en <span class="gradient-text">hivernage.</span></h1>
+                <p>On filtre les curieux comme on calibre un filtre à sable. Vous ne recevez que des porteurs de projets réels, prêts à couler le béton, directement dans votre agenda.</p>
+                <a href="#contact" class="btn btn-glow">Réserver une consultation stratégique</a>
+            </div>
+        </section>
+
+        <!-- LEAD MAGNET -->
+        <section class="container lead-magnet">
+            <div class="glass-card">
+                <div>
+                    <h3>Votre système fuit-il ?</h3>
+                    <p>Faites le test du pH de votre présence en ligne. Téléchargez notre audit gratuit sur les 3 fuites de budget que font 90% des constructeurs de piscines.</p>
+                </div>
+                <form class="form-row" onsubmit="event.preventDefault(); alert('Dans la version finale, ceci connectera à ton CRM (Mailchimp/Klaviyo).');">
+                    <input type="email" placeholder="Votre email professionnel" required>
+                    <button type="submit" class="btn btn-glow">Recevoir l'Audit</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- MÉTHODE -->
+        <section class="section container">
+            <div class="section-header reveal">
+                <h2 class="gradient-text">Une méthode étanche.</h2>
+                <p style="color: var(--text-muted);">De l'analyse du terrain jusqu'à la mise en eau de vos chantiers.</p>
+            </div>
+            
+            <div class="grid-3">
+                <div class="feature-card reveal">
+                    <div class="icon-box">01</div>
+                    <h3>Traitement Choc</h3>
+                    <p>Nous lançons des campagnes ultra-ciblées sur votre zone de chalandise pour inonder votre secteur de votre présence.</p>
+                </div>
+                <div class="feature-card reveal" style="transition-delay: 0.1s;">
+                    <div class="icon-box">02</div>
+                    <h3>Filtration des Leads</h3>
+                    <p>Le volume c'est bien, la qualité c'est mieux. Notre système élimine les rêveurs sans budget pour ne garder que la crème des porteurs de projets.</p>
+                </div>
+                <div class="feature-card reveal" style="transition-delay: 0.2s;">
+                    <div class="icon-box">03</div>
+                    <h3>Mise en Route</h3>
+                    <p>Les demandes de devis qualifiées tombent directement dans vos mains. Il ne vous reste plus qu'à signer et terrasser.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT -->
+        <section class="section container">
+            <div class="founder-section reveal">
+                <div class="founder-info">
+                    <h2>Derrière la machine.</h2>
+                    <p>Je suis <strong>Kaïs El Hajji</strong>, fondateur de Mandhack.</p>
+                    <p>Je ne travaille pas avec les plombiers, ni les électriciens, ni les plaquistes. Mon agence est 100% dédiée à l'écosystème de la piscine. Pourquoi ? Parce qu'on ne vend pas un bassin à 40 000€ comme on vend un dépannage de chaudière.</p>
+                    <p>Mon objectif : vous apporter une prédictibilité totale sur votre remplissage annuel.</p>
+                    <div class="signature">KAÏS EL HAJJI</div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <h3 style="font-size: 2rem; margin-bottom: 1rem;">Prêt à plonger ?</h3>
+                    <p style="color: var(--text-muted); max-width: 400px; margin-bottom: 2rem;">Contactez-moi directement pour une étude de votre zone de chalandise. Zéro engagement, 100% transparence.</p>
+                    <a href="mailto:kais.mandhack@gmail.com" class="btn btn-glow">Écrire un email</a>
+                </div>
+                <div class="contact-info">
+                    <p><strong>Email :</strong> kais.mandhack@gmail.com</p>
+                    <p><strong>Téléphone :</strong> 06 19 38 43 53</p>
+                    <p><strong>SIRET :</strong> 10094060000016</p>
+                    <br>
+                    <p>Opérant sur toute la France.</p>
+                </div>
+            </div>
+            <div class="legal">
+                &copy; 2026 Mandhack - Kaïs El Hajji. Tous droits réservés.
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPTS POUR LES EFFETS -->
+    <script>
+        // Custom Cursor
+        const dot = document.querySelector('.cursor-dot');
+        const outline = document.querySelector('.cursor-outline');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            dot.style.left = `${posX}px`;
+            dot.style.top = `${posY}px`;
+            
+            // Delai fluide pour l'outline
+            setTimeout(() => {
+                outline.style.left = `${posX}px`;
+                outline.style.top = `${posY}px`;
+            }, 50);
+        });
+
+        // Effet sur les liens
+        document.querySelectorAll('a, button, input').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                outline.style.transform = 'translate(-50%, -50%) scale(1.5)';
+                outline.style.backgroundColor = 'rgba(0, 229, 255, 0.1)';
+            });
+            el.addEventListener('mouseleave', () => {
+                outline.style.transform = 'translate(-50%, -50%) scale(1)';
+                outline.style.backgroundColor = 'transparent';
+            });
+        });
+
+        // Animations au scroll
+        const reveals = document.querySelectorAll('.reveal');
+        const revealOnScroll = () => {
+            const windowHeight = window.innerHeight;
+            const elementVisible = 150;
+
+            reveals.forEach(reveal => {
+                const elementTop = reveal.getBoundingClientRect().top;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+                }
+            });
+        };
+        window.addEventListener('scroll', revealOnScroll);
+        revealOnScroll(); // Trigger au chargement
+    </script>
+</body>
+</html>
